@@ -1,0 +1,21 @@
+{
+    "name": "shanjue/container-project",
+    "description": "Container Project",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sai myo min aung",
+            "email": "saimyominaung2110@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "psr/container": "^1.0@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "ContainerProject\\":"src/"
+        }
+    }
+}
