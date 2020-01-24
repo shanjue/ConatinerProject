@@ -48,13 +48,18 @@ class Container implements ContainerInterface
 
         $this->resolve($alias, $concrete);
     }
-    public function addFactory(string $alias, Closure $concrete)
+    public function bindClosure(string $alias, Closure $concrete)
     {
         if (!$concrete instanceof Closure) { // We use closures in order to enable factory composition
             throw new ContainerException(sprintf('%s is not closure', $concrete));
         }
-        
+
         $this->definitions[$alias] = new FactoryDefination($concrete);
+    }
+
+    public function bindSetter(string $alias, string $concrete, array $method)
+    {
+        $this->definitions[$alias] = new SetterDefination($concrete, $method);
     }
 
     public function resolve(string $alias, string $concrete)
