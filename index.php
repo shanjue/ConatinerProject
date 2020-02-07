@@ -3,7 +3,35 @@
 use ContainerProject\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
-
+class A
+{
+    public function __construct(B $b)
+    {
+        $this->b = $b;
+    }
+    public function bio()
+    {
+        return $this->b->bio();
+    }
+}
+class B
+{
+    public function __construct(C $c)
+    {
+        $this->c = $c;
+    }
+    public function bio()
+    {
+        return $this->c->bio();
+    }
+}
+class C
+{
+    public function bio()
+    {
+        return 'Bio from C Class';
+    }
+}
 class FirstName
 {
     public function getFirstName()
@@ -56,8 +84,20 @@ class CarFactory
     }
 }
 
-$container = new Container();
+class Coffee
+{
+    private static $coffee = 'Shwe Pa Zon Coffee';
+    private static $milk = 'Pure Milk';
 
+    public static function brew()
+    {
+        return 'You can brew ' . self::$coffee . ' with ' . self::$milk . '.';
+    }
+}
+
+// echo Coffee::brew();
+$container = new Container();
+$container->bind('A', A::class);
 $container->bindSetter('RedCar', CarFactory::class, ['setCar' => 'red']);
 
 $container->bind('FullName', FullName::class);
@@ -71,6 +111,10 @@ $container->bindClosure('Clo', function () {
     return 'I am ' . $param; // prints I am Dave!
 });
 
+$container->bindSkeleton('coffee', Coffee::class);
+
 echo $container->get('RedCar')->build();
 echo $container->get('Clo')();
 echo $container->get('FullName')->getFullName();
+echo $container->get('coffee')::brew();
+echo $container->get('A')->bio();

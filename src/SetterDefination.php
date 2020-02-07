@@ -7,7 +7,7 @@ class SetterDefination implements DefinationInterface
     private $concrete;
     private $method;
 
-    public function __construct(string $concrete, array $method)
+    public function __construct(string $concrete, $method)
     {
         $this->concrete = $concrete;
         $this->method = $method;
@@ -21,9 +21,17 @@ class SetterDefination implements DefinationInterface
     public function instantiate($concrete, $method)
     {
         $instance = new $concrete;
-        foreach ($method as $method => $parameter) {
-            $instance->$method($parameter);
+
+        if(is_array($method)){
+            foreach ($method as $methodname => $parameter) {
+                $instance->$methodname($parameter);
+            }
         }
+
+        if(is_string($method)){
+            $instance->$method();
+        }
+        
         return $instance;
     }
 }

@@ -12,10 +12,10 @@ use ContainerProject\NotFoundException;
 class Container implements ContainerInterface
 {
     /**
-     * Definitions
+     * Definations
      * @var array
      */
-    private $definitions = [];
+    private $definations = [];
 
     public function get($id)
     {
@@ -24,14 +24,14 @@ class Container implements ContainerInterface
         }
 
         /**
-         * highlight_string("<?php\n" . var_export($this->definitions, true) . ";\n?>");
+         * highlight_string("<?php\n" . var_export($this->definations, true) . ";\n?>");
          *  */
-        return $this->definitions[$id]->build();
+        return $this->definations[$id]->build();
     }
 
     public function has($id)
     {
-        return array_key_exists($id, $this->definitions);
+        return array_key_exists($id, $this->definations);
     }
 
     public function bind(string $alias, string $concrete)
@@ -54,16 +54,21 @@ class Container implements ContainerInterface
             throw new ContainerException(sprintf('%s is not closure', $concrete));
         }
 
-        $this->definitions[$alias] = new FactoryDefination($concrete);
+        $this->definations[$alias] = new FactoryDefination($concrete);
     }
 
-    public function bindSetter(string $alias, string $concrete, array $method)
+    public function bindSetter(string $alias, string $concrete, $method)
     {
-        $this->definitions[$alias] = new SetterDefination($concrete, $method);
+        $this->definations[$alias] = new SetterDefination($concrete, $method);
     }
 
     public function resolve(string $alias, string $concrete)
     {
-        $this->definitions[$alias] = new ClassDefination($concrete);
+        $this->definations[$alias] = new ClassDefination($concrete);
+    }
+
+    public function bindSkeleton(string $alias, string $concrete)
+    {
+        $this->definations[$alias] = new SkeletonDefination($concrete);
     }
 }
